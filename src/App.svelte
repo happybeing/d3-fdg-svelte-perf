@@ -1,4 +1,5 @@
 <script>
+	import {tick } from 'svelte';
 	import GraphSvg from './NetworkGraph.svelte';
 	import GraphCanvas from './NetworkGraphCanvas.svelte';
 	import GraphCanvasIdContext from './NetworkGraphCanvasIdContext.svelte';
@@ -25,7 +26,10 @@
 
 	$: graph = makeDataSource(dataSource);
 
+	let resettingChart = false; 
 	function makeDataSource (input) {
+		resettingChart = true 
+		tick().then(() => resettingChart = false); 
 		if (input && input.type === 'json-data') return makeUsingJsonData(input.source);
 		if (input && input.type === 'ngraph.generator') return makeUsingNgraphGenerator(input.source)
 		return undefined;
@@ -96,12 +100,15 @@
 		Visualise
 	</button>
 </form>	
+
+{#if !resettingChart && dataSource}
 <div class="chart">
-	{#if dataSource && visualisation && visualisation.type === 'graphSvg'}
+	{#if visualisation.type === 'graphSvg'}
 	<GraphSvg graph={graph}/>
-	{:else if dataSource && visualisation && visualisation.type === 'graphCanvas'}
+	{:else if visualisation.type === 'graphCanvas'}
 	<GraphCanvas graph={graph}/>
-	{:else if dataSource && visualisation && visualisation.type === 'graphCanvasIdContext'}
+	{:else if visualisation.type === 'graphCanvasIdContext'}
 	<GraphCanvasIdContext graph={graph}/>
 	{/if}
 </div>
+{/if}
