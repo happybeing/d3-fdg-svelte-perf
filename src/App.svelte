@@ -8,18 +8,15 @@
 	import generator from 'ngraph.generators'
 	let data2 = generator.ladder(10);
 
-	let questions = [
-		{ id: 1, text: `Force Graph (SVG)`, type: 'graphSvg' },
-		{ id: 2, text: `Force Graph (Canvas + d3 find)`, type: 'graphCanvas' },
-		{ id: 3, text: `Force Graph (Canvas + id Context)`, type: 'graphCanvasIdContext' }
+	let visualisations = [
+		{ text: `Force Graph (SVG)`, type: 'graphSvg' },
+		{ text: `Force Graph (Canvas + d3 find)`, type: 'graphCanvas' },
+		{ text: `Force Graph (Canvas + id Context)`, type: 'graphCanvasIdContext' }
 	];
 
 	let selected;
-
-	let answer = '';
-
 	function handleSubmit() {
-		alert(`chose ${selected.id} (${selected.text}) with "${selected.type}"`);
+		alert(`(${selected.text}) with "${selected.type}"`);
 	}
 </script>
 
@@ -39,8 +36,8 @@
 
 <form on:submit|preventDefault={handleSubmit}>
 	<label>Type:</label>
-	<select bind:value={selected} on:change="{() => answer = ''}" title='Type'>
-		{#each questions as question}
+	<select bind:value={selected} title='Type'>
+		{#each visualisations as question}
 			<option value={question}>
 				{question.text}
 			</option>
