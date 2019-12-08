@@ -1,4 +1,4 @@
-# D3 Performance of Graph Visualisation in Svelte
+# D3 Graph Visualisation Performance in Svelte
 
 **STATUS: this is work in progress, not yet working (December 2019)!**
 This project contains Svelte JS versions of the [D3 Force Directed Graph example](https://observablehq.com/@d3/force-directed-graph)
