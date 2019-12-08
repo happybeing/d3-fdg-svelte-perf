@@ -1,9 +1,4 @@
 <h2>d3 Force Directed Graph in Sveltejs - svg (zoom)</h2>
-<p>Uses SVG for the display and DOM elements for mouse handling.</p>
-
-<p>Features: hover, drag nodes, zoom and pan with mouse
-or touch screen. Note: on small touch screens you may need to 
-increase hit radius to hit a node with a 'fat finger'!</p>
 <script>
 	import { onMount } from 'svelte';
 
@@ -38,8 +33,24 @@ increase hit radius to hit a node with a 'fat finger'!</p>
 		.domain([0, height])
 		.range([height, 0]);
 
-	$: links = graph.links.map(d => Object.create(d));
-	$: nodes = graph.nodes.map(d => Object.create(d));  
+	$: links = makeLinks(graph);
+	$: nodes = makeNodes(graph);
+	
+	function makeLinks(g) {
+		let links = [];
+		g.forEachLink(function(link) {
+			links.push({source: link.fromId, target: link.toId, value: 1});
+			});
+		return links;
+	}
+
+	function makeNodes(g) {
+		let nodes = [];
+		g.forEachNode(function(node) {
+			nodes.push({id: node.id, group: 1});
+			});
+		return nodes;
+	}
 
 	const colourScale = d3.scaleOrdinal(d3.schemeCategory10);
 
