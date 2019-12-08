@@ -3,21 +3,61 @@
 	import GraphCanvas from './NetworkGraphCanvas.svelte';
 	import GraphCanvasIdContext from './NetworkGraphCanvasIdContext.svelte';
 	
-	import data from './data.js';
+	import lesMisData from './data-les-miserables.js';
 
-	import generator from 'ngraph.generators'
-	let data2 = generator.ladder(10);
+	import ngraphGenerator from 'ngraph.generators'
+	let dataSource;
+	let dataOptions = [
+		{ text: 'Les Miserables (json)', type: 'json-data', source: lesMisData },
+		{ text: 'Graph Generator', type: 'ngraph.generator', source: ngraphGenerator }
+	];
 
-	let visualisations = [
+	let visualisation;
+	let visualisationOptions = [
 		{ text: `Force Graph (SVG)`, type: 'graphSvg' },
 		{ text: `Force Graph (Canvas + d3 find)`, type: 'graphCanvas' },
 		{ text: `Force Graph (Canvas + id Context)`, type: 'graphCanvasIdContext' }
 	];
 
-	let selected;
-	function handleSubmit() {
-		alert(`(${selected.text}) with "${selected.type}"`);
+	function handleSubmit () {
+		alert(`(${visualisation.text}) with "${visualisation.type}"`);
 	}
+
+	$: graph = makeDataSource(dataSource);
+
+	function makeDataSource (input) {
+		if (input && input.type === 'json-data') return makeUsingJsonData(input.source);
+		if (input && input.type === 'ngraph.generator') return makeUsingNgraphGenerator(input.source)
+		return undefined;
+	}
+
+	// Json Input Data
+	function makeUsingJsonData (jsonData) {
+		return jsonData;
+	}
+
+	// Graph generator
+	function makeUsingNgraphGenerator (generator) {
+		let graph = generator.ladder(10);
+		return { nodes: makeNodes(graph), links: makeLinks(graph) }
+	}
+	
+	function makeLinks(g) {
+		let links = [];
+		g.forEachLink(function(link) {
+			links.push({source: link.fromId, target: link.toId, value: 1});
+			});
+		return links;
+	}
+
+	function makeNodes(g) {
+		let nodes = [];
+		g.forEachNode(function(node) {
+			nodes.push({id: node.id, group: 1});
+			});
+		return nodes;
+	}
+
 </script>
 
 <style>
@@ -36,10 +76,19 @@
 
 <form on:submit|preventDefault={handleSubmit}>
 	<label>Type:</label>
-	<select bind:value={selected} title='Type'>
-		{#each visualisations as question}
-			<option value={question}>
-				{question.text}
+	<select bind:value={visualisation} title='Type'>
+		{#each visualisationOptions as option}
+			<option value={option}>
+				{option.text}
+			</option>
+		{/each}
+	</select>
+
+	<label>Choose Source:</label>
+	<select bind:value={dataSource} title='Type'>
+		{#each dataOptions as option}
+			<option value={option}>
+				{option.text}
 			</option>
 		{/each}
 	</select>
@@ -48,11 +97,11 @@
 	</button>
 </form>	
 <div class="chart">
-	{#if selected && selected.type === 'graphSvg'}
-	<GraphSvg graph={data2}/>
-	{:else if selected && selected.type === 'graphCanvas'}
-	<GraphCanvas graph={data2}/>
-	{:else}
-	<GraphCanvasIdContext graph={data2}/>
+	{#if dataSource && visualisation && visualisation.type === 'graphSvg'}
+	<GraphSvg graph={graph}/>
+	{:else if dataSource && visualisation && visualisation.type === 'graphCanvas'}
+	<GraphCanvas graph={graph}/>
+	{:else if dataSource && visualisation && visualisation.type === 'graphCanvasIdContext'}
+	<GraphCanvasIdContext graph={graph}/>
 	{/if}
 </div>

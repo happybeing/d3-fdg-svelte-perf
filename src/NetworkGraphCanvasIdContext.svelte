@@ -34,24 +34,8 @@
         .domain([0, height])
         .range([height, 0]);
 
-	$: links = makeLinks(graph);
-	$: nodes = makeNodes(graph);
-	
-	function makeLinks(g) {
-		let links = [];
-		g.forEachLink(function(link) {
-			links.push({source: link.fromId, target: link.toId, value: 1});
-			});
-		return links;
-	}
-
-	function makeNodes(g) {
-		let nodes = [];
-		g.forEachNode(function(node) {
-			nodes.push({id: node.id, group: 1});
-			});
-		return nodes;
-	}
+	$: links = graph.links.map(d => Object.create(d));
+	$: nodes = graph.nodes.map(d => Object.create(d));  
 
     const groupColour = d3.scaleOrdinal(d3.schemeCategory10);
 
