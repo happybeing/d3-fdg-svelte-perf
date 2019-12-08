@@ -1,4 +1,4 @@
-<h2>d3 Force Directed Graph in Svelte js - 2 x canvas</h2>
+<!-- d3 Force Directed Graph in Svelte js - 2 x canvas -->
 
 <script>
     import { onMount } from 'svelte';

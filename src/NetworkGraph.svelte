@@ -1,4 +1,4 @@
-<h2>d3 Force Directed Graph in Sveltejs - svg (zoom)</h2>
+<!-- d3 Force Directed Graph in Sveltejs - svg (zoom) -->
 <script>
 	import { onMount } from 'svelte';
 

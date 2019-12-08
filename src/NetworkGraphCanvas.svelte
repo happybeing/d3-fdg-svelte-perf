@@ -1,4 +1,4 @@
-<h2>d3 Force Directed Graph in Svelte js - canvas with d3 hit detection</h2>
+<!-- d3 Force Directed Graph in Svelte js - canvas with d3 hit detection -->
 
 <script>
     import { onMount } from 'svelte';
