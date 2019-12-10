@@ -18,10 +18,11 @@
 
 	let visualisation;
 	let visualisationOptions = [
-		{ text: `Force Graph (SVG)`, type: 'graphSvg' },
-		{ text: `Force Graph (Canvas + d3 find)`, type: 'graphCanvas' },
-		{ text: `Force Graph (Canvas + id Context)`, type: 'graphCanvasIdContext' }
+		{ text: 'Force Graph (SVG)', type: 'graphSvg' },	
+		{ text: 'Force Graph (Canvas + d3 find)', type: 'graphCanvas' },
+		{ text: 'Force Graph (Canvas + id Context)', type: 'graphCanvasIdContext' }
 	];
+
 
 	$: makeDataSource(dataSource);
 
