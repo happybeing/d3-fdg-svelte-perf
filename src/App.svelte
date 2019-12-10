@@ -1,8 +1,11 @@
 <script>
-	import {tick } from 'svelte';
+	import { writable } from 'svelte/store';
+
 	import GraphSvg from './NetworkGraph.svelte';
 	import GraphCanvas from './NetworkGraphCanvas.svelte';
 	import GraphCanvasIdContext from './NetworkGraphCanvasIdContext.svelte';
+
+	const graph = writable(0);
 	
 	import lesMisData from './data-les-miserables.js';
 
@@ -20,19 +23,14 @@
 		{ text: `Force Graph (Canvas + id Context)`, type: 'graphCanvasIdContext' }
 	];
 
-	function handleSubmit () {
-		alert(`(${visualisation.text}) with "${visualisation.type}"`);
-	}
-
-	$: graph = makeDataSource(dataSource);
+	$: makeDataSource(dataSource);
 
 	let resettingChart = false; 
 	function makeDataSource (input) {
-		resettingChart = true 
-		tick().then(() => resettingChart = false); 
-		if (input && input.type === 'json-data') return makeUsingJsonData(input.source);
-		if (input && input.type === 'ngraph.generator') return makeUsingNgraphGenerator(input.source)
-		return undefined;
+		let data;
+		if (input && input.type === 'json-data') data = makeUsingJsonData(input.source);
+		if (input && input.type === 'ngraph.generator') data = makeUsingNgraphGenerator(input.source)
+		graph.update(() => data);
 	}
 
 	// Json Input Data
@@ -42,8 +40,8 @@
 
 	// Graph generator
 	function makeUsingNgraphGenerator (generator) {
-		let graph = generator.ladder(10);
-		return { nodes: makeNodes(graph), links: makeLinks(graph) }
+		let g = generator.ladder(10);
+		return { nodes: makeNodes(g), links: makeLinks(g) }
 	}
 	
 	function makeLinks(g) {
@@ -65,7 +63,6 @@
 </script>
 
 <style>
-	input { display: block; width: 1000px; max-width: 100%; }
 	.chart {
 		width: 100%;
 		max-width: 640px;
@@ -78,7 +75,7 @@
 
 <h2>D3 Visualisation</h2>
 
-<form on:submit|preventDefault={handleSubmit}>
+<form>
 	<label>Type:</label>
 	<select bind:value={visualisation} title='Type'>
 		{#each visualisationOptions as option}
@@ -96,19 +93,16 @@
 			</option>
 		{/each}
 	</select>
-	<button type=submit>
-		Visualise
-	</button>
 </form>	
 
-{#if !resettingChart && dataSource}
-<div class="chart">
-	{#if visualisation.type === 'graphSvg'}
-	<GraphSvg graph={graph}/>
-	{:else if visualisation.type === 'graphCanvas'}
-	<GraphCanvas graph={graph}/>
-	{:else if visualisation.type === 'graphCanvasIdContext'}
-	<GraphCanvasIdContext graph={graph}/>
-	{/if}
-</div>
+{#if $graph}
+	<div class="chart">
+		{#if visualisation.type === 'graphSvg'}
+			<GraphSvg {graph}/>
+		{:else if visualisation.type === 'graphCanvas'}
+			<GraphCanvas {graph}/>
+		{:else if visualisation.type === 'graphCanvasIdContext'}
+			<GraphCanvasIdContext {graph}/>
+		{/if}
+	</div>
 {/if}

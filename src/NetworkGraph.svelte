@@ -1,6 +1,6 @@
 <!-- d3 Force Directed Graph in Sveltejs - svg (zoom) -->
 <script>
-	import { onMount } from 'svelte';
+	import { onDestroy, tick } from 'svelte';
 
 	import { scaleLinear, scaleOrdinal } from 'd3-scale';
     import { zoom, zoomIdentity } from 'd3-zoom';
@@ -33,14 +33,24 @@
 		.domain([0, height])
 		.range([height, 0]);
 
-	$: links = graph.links.map(d => Object.create(d));
-	$: nodes = graph.nodes.map(d => Object.create(d));  
-
 	const colourScale = d3.scaleOrdinal(d3.schemeCategory10);
+
+	$: links = $graph.links.map(d => Object.create(d));
+	$: nodes = $graph.nodes.map(d => Object.create(d));
+
+	const unsubscribe = graph.subscribe(async $data => {
+			// Have to use tick so links and nodes can catch up
+			await tick();
+			render();
+	});
+
+	onDestroy(() => {
+			unsubscribe();
+	});
 
 	let transform = d3.zoomIdentity;
     let simulation
-	onMount(() => {
+	function render () {
 
 	simulation = d3.forceSimulation(nodes)
 		.force("link", d3.forceLink(links).id(d => d.id))
@@ -58,7 +68,7 @@
 		.call(d3.zoom()
           .scaleExtent([1 / 10, 8])
           .on('zoom', zoomed));
-	});
+	}
 
 	function simulationUpdate () {
 		simulation.tick();
