@@ -45,29 +45,35 @@
 	});
 
 	onDestroy(() => {
-			unsubscribe();
+		console.log('onDestroy()');	// Never called
+		unsubscribe();
 	});
 
 	let transform = d3.zoomIdentity;
     let simulation
 	function render () {
+		if (simulation) {
+			simulation.nodes([])
+			.force("link", d3.forceLink([]))
+			simulation = undefined;
+		}
 
-	simulation = d3.forceSimulation(nodes)
-		.force("link", d3.forceLink(links).id(d => d.id))
-		.force("charge", d3.forceManyBody())
-		.force("center", d3.forceCenter(width / 2, height / 2))
-		.on('tick', simulationUpdate);
+		simulation = d3.forceSimulation(nodes)
+			.force("link", d3.forceLink(links).id(d => d.id))
+			.force("charge", d3.forceManyBody())
+			.force("center", d3.forceCenter(width / 2, height / 2))
+			.on('tick', simulationUpdate);
 
-	d3.select(svg)
-		.call(d3.drag()
-			.container(svg)
-			.subject(dragsubject)
-			.on("start", dragstarted)
-			.on("drag", dragged)
-			.on("end", dragended))
-		.call(d3.zoom()
-          .scaleExtent([1 / 10, 8])
-          .on('zoom', zoomed));
+		d3.select(svg)
+			.call(d3.drag()
+				.container(svg)
+				.subject(dragsubject)
+				.on("start", dragstarted)
+				.on("drag", dragged)
+				.on("end", dragended))
+			.call(d3.zoom()
+			.scaleExtent([1 / 10, 8])
+			.on('zoom', zoomed));
 	}
 
 	function simulationUpdate () {

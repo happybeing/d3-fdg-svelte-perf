@@ -59,6 +59,12 @@
     let transform = d3.zoomIdentity;
     let simulation, context
     function render () {
+		if (simulation) {
+			simulation.nodes([])
+			.force("link", d3.forceLink([]))
+			simulation = undefined;
+		}
+
         context = canvas.getContext('2d');
         resize()
         

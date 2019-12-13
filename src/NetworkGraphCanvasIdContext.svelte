@@ -56,6 +56,12 @@
         idContext = idCanvas.getContext('2d');
         resize()
         
+		if (simulation) {
+			simulation.nodes([])
+			.force("link", d3.forceLink([]))
+			simulation = undefined;
+		}
+
         simulation = d3.forceSimulation(nodes)
             .force("link", d3.forceLink(links).id(d => d.id))
             .force("charge", d3.forceManyBody())
