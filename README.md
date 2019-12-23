@@ -1,11 +1,11 @@
 # D3 Graph Visualisation Performance in Svelte
 
 This project contains Svelte JS versions of the [D3 Force Directed Graph example](https://observablehq.com/@d3/force-directed-graph)
-modified to allow testing on networks of arbitrary size. Three different ways of 
+modified to allow testing on networks of arbitrary size. Different ways of 
 implementing the graph are included so that their performance can be
 compared.
 
-The implementations are based on [d3-fdg-svelte](https://github.com/theWebalyst/d3-fdg-svelte) repository (commit [1e23a49](https://github.com/theWebalyst/d3-fdg-svelte/commit/1e23a49a3203a5228afbffec66adff67304665b7)). If you want
+The implementations are based on [d3-fdg-svelte](https://github.com/theWebalyst/d3-fdg-svelte) repository (commit [1e23a49](https://github.com/theWebalyst/d3-fdg-svelte/commit/bc982a59d9b1fa9340c4680615dddda2066bf182)). If you want
 to understand the approach and contrast their implementations, that is the place to look!
 
 The approaches compared use:
