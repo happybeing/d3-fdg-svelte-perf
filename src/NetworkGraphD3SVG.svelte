@@ -34,13 +34,18 @@
     onDestroy(() => {
 		console.log('onDestroy()');
         unsubscribe();
-        d3.select("svg").remove();
-        svg = undefined;
+        destroyD3Elements();
 	});
+
+    function destroyD3Elements () {
+         d3.select("svg").remove();
+        svg = undefined;
+    }
 
     const colourScale = d3.scaleOrdinal(d3.schemeCategory10);
 
     function render () {
+        destroyD3Elements();
 		if (simulation) {
 			simulation.nodes([])
 			.force("link", d3.forceLink([]))
