@@ -1,6 +1,5 @@
 # D3 Graph Visualisation Performance in Svelte
 
-**STATUS: this is work in progress, not yet working (December 2019)!**
 This project contains Svelte JS versions of the [D3 Force Directed Graph example](https://observablehq.com/@d3/force-directed-graph)
 modified to allow testing on networks of arbitrary size. Three different ways of 
 implementing the graph are included so that their performance can be
@@ -10,9 +9,10 @@ The implementations are based on [d3-fdg-svelte](https://github.com/theWebalyst/
 to understand the approach and contrast their implementations, that is the place to look!
 
 The approaches compared use:
-1. `SVG` elements
-2. `canvas` with D3 hit detection
-3. `canvas` with a second context for hit detection
+1. `SVG` elements created/updated by D3
+2. `SVG` elements created/updated by Svelte
+3. `canvas` with D3 hit detection
+4. `canvas` with a second context for hit detection
 
 These can be tested with different sizes and topographies created with [ngraph](https://github.com/anvaka/ngraph) generators.
 
