@@ -5,7 +5,7 @@ modified to allow testing on networks of arbitrary size. Different ways of
 implementing the graph are included so that their performance can be
 compared.
 
-The implementations are based on [d3-fdg-svelte](https://github.com/theWebalyst/d3-fdg-svelte) repository (commit [1e23a49](https://github.com/theWebalyst/d3-fdg-svelte/commit/bc982a59d9b1fa9340c4680615dddda2066bf182)). If you want
+The implementations are based on [d3-fdg-svelte](https://github.com/theWebalyst/d3-fdg-svelte) repository (commit [bc982a5](https://github.com/theWebalyst/d3-fdg-svelte/commit/bc982a59d9b1fa9340c4680615dddda2066bf182)). If you want
 to understand the approach and contrast their implementations, that is the place to look!
 
 The approaches compared use:
