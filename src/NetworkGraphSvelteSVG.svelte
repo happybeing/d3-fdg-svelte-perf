@@ -1,4 +1,5 @@
-<!-- d3 Force Directed Graph in Sveltejs - svg (zoom) -->
+<!-- d3 Force Directed Graph in Sveltejs - Svelte created svg and DOM elements(zoom) -->
+
 <script>
 	import { onDestroy, tick } from 'svelte';
 
@@ -21,22 +22,8 @@
 
 	const padding = { top: 20, right: 40, bottom: 40, left: 25 };
 
-	$: xScale = scaleLinear()
-		.domain([0, 20])
-		.range([padding.left, width - padding.right]);
-
-	$: yScale = scaleLinear()
-		.domain([0, 12])
-		.range([height - padding.bottom, padding.top]);
-
-	$: d3yScale = scaleLinear()
-		.domain([0, height])
-		.range([height, 0]);
-
-	const colourScale = d3.scaleOrdinal(d3.schemeCategory10);
-
 	$: links = $graph.links.map(d => Object.create(d));
-	$: nodes = $graph.nodes.map(d => Object.create(d));
+	$: nodes = $graph.nodes.map(d => Object.create(d));  
 
 	const unsubscribe = graph.subscribe(async $data => {
 			// Have to use tick so links and nodes can catch up
@@ -44,10 +31,12 @@
 			render();
 	});
 
-	onDestroy(() => {
-		console.log('onDestroy()');	// Never called
+    onDestroy(() => {
+		console.log('onDestroy()');
 		unsubscribe();
 	});
+
+    const colourScale = d3.scaleOrdinal(d3.schemeCategory10);
 
 	let transform = d3.zoomIdentity;
     let simulation
@@ -58,22 +47,22 @@
 			simulation = undefined;
 		}
 
-		simulation = d3.forceSimulation(nodes)
-			.force("link", d3.forceLink(links).id(d => d.id))
-			.force("charge", d3.forceManyBody())
-			.force("center", d3.forceCenter(width / 2, height / 2))
-			.on('tick', simulationUpdate);
+	simulation = d3.forceSimulation(nodes)
+		.force("link", d3.forceLink(links).id(d => d.id))
+		.force("charge", d3.forceManyBody())
+		.force("center", d3.forceCenter(width / 2, height / 2))
+		.on('tick', simulationUpdate);
 
-		d3.select(svg)
-			.call(d3.drag()
-				.container(svg)
-				.subject(dragsubject)
-				.on("start", dragstarted)
-				.on("drag", dragged)
-				.on("end", dragended))
-			.call(d3.zoom()
-			.scaleExtent([1 / 10, 8])
-			.on('zoom', zoomed));
+	d3.select(svg)
+		.call(d3.drag()
+			.container(svg)
+			.subject(dragsubject)
+			.on("start", dragstarted)
+			.on("drag", dragged)
+			.on("end", dragended))
+		.call(d3.zoom()
+          .scaleExtent([1 / 10, 8])
+          .on('zoom', zoomed));
 	}
 
 	function simulationUpdate () {

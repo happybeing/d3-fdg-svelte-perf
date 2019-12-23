@@ -21,19 +21,6 @@
     let height = 600;
 
     const padding = { top: 20, right: 40, bottom: 40, left: 25 };
-
-    $: xScale = scaleLinear()
-        .domain([0, 20])
-        .range([padding.left, width - padding.right]);
-
-    $: yScale = scaleLinear()
-        .domain([0, 12])
-        .range([height - padding.bottom, padding.top]);
-
-    $: d3yScale = scaleLinear()
-        .domain([0, height])
-        .range([height, 0]);
-
     const groupColour = d3.scaleOrdinal(d3.schemeCategory10);
 
     $: links = $graph.links.map(d => Object.create(d));

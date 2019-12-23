@@ -1,7 +1,8 @@
 <script>
 	import { writable } from 'svelte/store';
 
-	import GraphSvg from './NetworkGraph.svelte';
+	import GraphD3SVG from './NetworkGraphD3SVG.svelte';
+	import GraphSvelteSVG from './NetworkGraphSvelteSVG.svelte';
 	import GraphCanvas from './NetworkGraphCanvas.svelte';
 	import GraphCanvasIdContext from './NetworkGraphCanvasIdContext.svelte';
 
@@ -37,7 +38,8 @@
 
 	let visualisation;
 	let visualisationOptions = [
-		{ text: 'Force Graph (SVG)', type: 'graphSvg' },	
+		{ text: 'Force Graph (D3 SVG)', type: 'graphD3Svg' },	
+		{ text: 'Force Graph (Svelte SVG)', type: 'graphSvelteSvg' },	
 		{ text: 'Force Graph (Canvas + d3 find)', type: 'graphCanvas' },
 		{ text: 'Force Graph (Canvas + id Context)', type: 'graphCanvasIdContext' }
 	];
@@ -96,7 +98,7 @@
 </style>
 
 <h2>D3 Visualisation</h2>
-
+<p>TODO: modify to use svelte:component (see <a href='https://svelte.dev/repl/svelte-component'>REPL</a>)</p>
 	<label>Visualise Using:</label>
 	<select bind:value={visualisation} title='Type'>
 		{#each visualisationOptions as option}
@@ -128,8 +130,10 @@
 
 {#if $graph}
 	<div class="chart">
-		{#if visualisation.type === 'graphSvg'}
-			<GraphSvg {graph}/>
+		{#if visualisation.type === 'graphD3Svg'}
+			<GraphD3SVG {graph}/>
+		{:else if visualisation.type === 'graphSvelteSvg'}
+			<GraphSvelteSVG {graph}/>
 		{:else if visualisation.type === 'graphCanvas'}
 			<GraphCanvas {graph}/>
 		{:else if visualisation.type === 'graphCanvasIdContext'}
